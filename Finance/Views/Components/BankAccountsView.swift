@@ -7,11 +7,11 @@
 import SwiftUI
 
 struct BankAccountsView: View {
-    @State private var accounts: [BankAccount] = [
-        BankAccount(name: "Checking", type: "Bank Account", balance: 8_420.55),
-        BankAccount(name: "Savings", type: "High-Yield Savings", balance: 32_100.00),
-        BankAccount(name: "Brokerage", type: "Investment Account", balance: 84_479.45)
-    ]
+    @State private var accounts: [PlaidAccount]
+    
+    init(accounts: [PlaidAccount]) {
+        self.accounts = accounts
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -25,8 +25,4 @@ struct BankAccountsView: View {
             }
         }
     }
-}
-
-#Preview {
-    BankAccountsView()
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct FinanceApp: App {
+    @State private var accounts: [PlaidAccount] = []
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

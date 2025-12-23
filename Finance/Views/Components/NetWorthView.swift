@@ -7,7 +7,11 @@
 import SwiftUI
 
 struct NetWorthView: View {
-    @State var netWorth: Double = 125_000.00
+    var netWorth: Double
+    
+    init(netWorth: Double) {
+        self.netWorth = netWorth
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -23,5 +27,5 @@ struct NetWorthView: View {
 }
 
 #Preview {
-    NetWorthView()
+    NetWorthView(netWorth: 125000.00)
 }

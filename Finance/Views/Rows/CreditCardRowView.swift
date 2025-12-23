@@ -1,14 +1,13 @@
 //
-//  AccountRowView.swift
+//  CreditCardRowView.swift
 //  Finance
 //
 //  Created by David Ott on 12/23/25.
 //
-
 import SwiftUI
 
-struct BankAccountRowView: View {
-    let account: BankAccount
+struct CreditCardRowView: View {
+    let account: PlaidAccount
 
     var body: some View {
         HStack {
@@ -16,7 +15,7 @@ struct BankAccountRowView: View {
                 Text(account.name)
                     .font(.headline)
 
-                Text(account.type)
+                Text(account.getSubtype)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -24,9 +23,16 @@ struct BankAccountRowView: View {
             Spacer()
 
             VStack(alignment: .trailing) {
-                Text(account.balance.formattedAsCurrency())
-                    .font(.subheadline)
+                Text(account.current.formattedAsCurrency())
+                    .font(.headline)
                     .monospacedDigit()
+                
+                if let utilization = account.utilizationPercentage {
+                    Text("Utilization: \(utilization)%")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .monospacedDigit()
+                }
             }
         }
         .padding()

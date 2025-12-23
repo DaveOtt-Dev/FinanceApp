@@ -30,7 +30,7 @@ struct ContentView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("Other Accounts, budgets, and transactions coming soon.")
+                Text("Other accounts, budgets, and transactions coming soon.")
                     .foregroundColor(.secondary)
             }
             

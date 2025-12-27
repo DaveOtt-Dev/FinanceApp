@@ -8,37 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var bankAccounts: [PlaidAccount] = []
-    @State private var creditCards: [PlaidAccount] = []
-    @State private var accountsLoaded = false
+    @State private var _bankAccounts: [PlaidAccount] = []
+    @State private var _creditCards: [PlaidAccount] = []
+    @State private var _accountsLoaded = false
     
     var body: some View {
         VStack {
-            if accountsLoaded {
-                VStack(alignment: .leading, spacing: 4) {
-                    let netWorth: Double = getNetWorth()
-                    
-                    NetWorthView(netWorth: netWorth)
-                    BankAccountsView(accounts: bankAccounts)
-                    CreditCardsView(accounts: creditCards)
-                }
-                .padding()
+            if _accountsLoaded {
+                AccountsView(bankAccounts: _bankAccounts, creditCards: _creditCards)
             } else {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .padding()
+                LoadingView()
             }
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Other accounts, budgets, and transactions coming soon.")
-                    .foregroundColor(.secondary)
-            }
-            
-            
-            Spacer()
         }
         .task {
             do {
+                let token = try await PlaidAPI.shared.createLinkToken()
+                print(token)
+                
                 let fetchedAccounts = try await PlaidAPI.shared.getAccounts()
                 
                 var banks: [PlaidAccount] = []
@@ -55,22 +41,14 @@ struct ContentView: View {
                     }
                 }
                 
-                bankAccounts = banks
-                creditCards = credits
-                accountsLoaded = true
+                _bankAccounts = banks
+                _creditCards = credits
+                _accountsLoaded = true
             } catch {
                 print("Failed to fetch accounts: \(error)")
-                accountsLoaded = true
+                _accountsLoaded = true
             }
         }
-    }
-    
-    func getNetWorth() -> Double {
-        let bankTotal = bankAccounts.reduce(0) { $0 + $1.current }
-        let creditTotal = creditCards.reduce(0) { $0 + $1.current }
-        let netWorth = bankTotal - creditTotal
-        
-        return netWorth
     }
 }
 

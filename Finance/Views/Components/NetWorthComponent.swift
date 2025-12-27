@@ -6,11 +6,11 @@
 //
 import SwiftUI
 
-struct NetWorthView: View {
-    var netWorth: Double
+struct NetWorthComponent: View {
+    var _netWorth: Double
     
     init(netWorth: Double) {
-        self.netWorth = netWorth
+        _netWorth = netWorth
     }
 
     var body: some View {
@@ -19,7 +19,7 @@ struct NetWorthView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            Text(netWorth.formattedAsCurrency())
+            Text(_netWorth.formattedAsCurrency())
                 .font(.largeTitle)
                 .fontWeight(.bold)
         }
@@ -27,5 +27,5 @@ struct NetWorthView: View {
 }
 
 #Preview {
-    NetWorthView(netWorth: 125000.00)
+    NetWorthComponent(netWorth: 125000.00)
 }

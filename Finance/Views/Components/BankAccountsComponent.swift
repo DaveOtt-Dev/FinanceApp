@@ -6,11 +6,11 @@
 //
 import SwiftUI
 
-struct BankAccountsView: View {
-    @State private var accounts: [PlaidAccount]
+struct BankAccountsComponent: View {
+    @State private var _accounts: [PlaidAccount]
     
     init(accounts: [PlaidAccount]) {
-        self.accounts = accounts
+        _accounts = accounts
     }
 
     var body: some View {
@@ -20,8 +20,8 @@ struct BankAccountsView: View {
                 .padding(.top, 20)
             
             // List of accounts
-            ForEach(accounts) { account in
-                BankAccountRowView(account: account)
+            ForEach(_accounts) { account in
+                BankAccountRowItem(account: account)
             }
         }
     }

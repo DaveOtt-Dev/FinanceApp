@@ -6,11 +6,11 @@
 //
 import SwiftUI
 
-struct CreditCardsView: View {
-    @State private var accounts: [PlaidAccount]
+struct CreditCardsComponent: View {
+    @State private var _accounts: [PlaidAccount]
     
     init(accounts: [PlaidAccount]) {
-        self.accounts = accounts
+        _accounts = accounts
     }
 
     var body: some View {
@@ -19,10 +19,10 @@ struct CreditCardsView: View {
                 .font(.headline)
                 .padding(.top, 20)
             
-            if !accounts.isEmpty {
+            if !_accounts.isEmpty {
                 // List of accounts
-                ForEach(self.accounts) { account in
-                    CreditCardRowView(account: account)
+                ForEach(_accounts) { account in
+                    CreditCardRowItem(_account: account)
                 }
             } else {
                 Text("No accounts")

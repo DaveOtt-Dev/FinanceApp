@@ -8,7 +8,9 @@ import SwiftUI
 import LinkKit
 
 struct AddAccountsView: View {
-    @State private var _showPlaidLink = false
+    @StateObject private var plaidService = PlaidService()
+    @State private var showPlaidLink = false
+    @State private var showErrorAlert = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -21,22 +23,28 @@ struct AddAccountsView: View {
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity)
             .background(.thinMaterial)
-            // .overlay(Divider(), alignment: .bottom)
         }
         
         ScrollView {
             VStack(spacing: 16) {
                 Button(action: {
-                    _showPlaidLink = true
+                    showPlaidLink = true
                 }) {
-                    Label("Link External Account", systemImage: "plus")
-                        .frame(maxWidth: .infinity)
-                        .padding()
+                    if plaidService.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    } else {
+                        Label("Link External Account", systemImage: "plus")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    }
                 }
                 .buttonStyle(.glass)
                 .controlSize(.regular)
-                .sheet(isPresented: $_showPlaidLink) {
-                    PlaidLinkViewControllerWrapper()
+                .disabled(plaidService.isLoading)
+                .sheet(isPresented: $showPlaidLink) {
+                    PlaidLinkViewControllerWrapper(plaidService: plaidService)
                 }
                 
                 Button(action: {
@@ -52,6 +60,18 @@ struct AddAccountsView: View {
             .padding()
             
             Spacer()
+        }
+        .onChange(of: plaidService.error) { oldValue, newValue in
+            if newValue != nil {
+                showErrorAlert = true
+            }
+        }
+        .alert("Linking Failed", isPresented: $showErrorAlert) {
+            Button("OK") {
+                plaidService.reset()
+            }
+        } message: {
+            Text(plaidService.error?.localizedDescription ?? "An unknown error occurred")
         }
     }
 }
